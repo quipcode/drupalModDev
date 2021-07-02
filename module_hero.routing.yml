@@ -12,3 +12,28 @@ module_hero.heroarticles:
     _controller: '\Drupal\module_hero\Controller\HeroController::heroArticles'
   requirements:
     _permission: "access content"
+
+module_hero.heroform:
+  path: '/hero-form'
+  defaults:
+    _form: '\Drupal\module_hero\Forms\HeroForm'
+    _title: 'Who will win'
+  requirements:
+    _permission: 'access content'
+
+
+module_hero.exampleform:
+  path: '/example-form'
+  defaults:
+    _form: '\Drupal\module_hero\Forms\ExampleForm'
+    _title: 'Showcase some elements'
+  requirements:
+    _permission: 'access content'
+
+module_hero.ajaxform:
+  path: '/ajax-form'
+  defaults:
+    _form: '\Drupal\module_hero\Forms\AjaxHeroForm'
+    _title: 'Ajax Form'
+  requirements:
+    _permission: 'access content'

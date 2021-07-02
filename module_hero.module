@@ -4,6 +4,7 @@
 * Implementing our hooks
 */
 
+include 'kint.phar';
 
 /*
 * Implements hook theme
@@ -18,4 +19,30 @@ function module_hero_theme($existing, $type, $theme, $path){
              'variables' => ['items' => [], 'title'=> '', 'current_user' => []],
          ]
          ];
+}
+
+
+/*
+* Implements hook form alter...hides the tag field(commented out) and renames the title to 'article title' for article creation form
+*
+*/
+function module_hero_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    
+    if($form_id == 'node_article_form'){
+        // $form['field_tags']['#access'] = FALSE;
+        $form['title']['widget'][0]['value']['#title'] = t("Article title");
+        // d($form); 
+        $form['#validate'][] = '_module_hero_article_validate';
+    }
+    
+}
+
+/**
+ * custom validation function to ensure number is not included in article title
+ */
+function _module_hero_article_validate(&$form, $form_state){
+    
+    if(is_numeric($form_state->getValue('title')[0]['value'])){
+           $form_state->setErrorByName('title', t('title may not contain a number'));
+    }
 }
