@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\module_hero\Services\HeroArticleService;
 use Drupal\user\Entity;
 
+use Drupal\Core\Config\ConfigFactory;
 
 
 include 'kint.phar';
@@ -19,6 +20,8 @@ include 'kint.phar';
 * */
 class HeroController extends ControllerBase{
 
+    protected $configFactory;
+
     /**
      * The hero article service
      * @var \Drupal\module_hero\Services\HeroArticleService
@@ -31,8 +34,9 @@ class HeroController extends ControllerBase{
      * @param \Drupal\module_hero\Services\HeroArticleService $articleHeroService
      *   The service
      */
-    public function __construct(HeroArticleService $articleHeroService){
+    public function __construct(HeroArticleService $articleHeroService, $configFactory){
         $this->articleHeroService = $articleHeroService;
+        $this->configFactory = $configFactory;
     }
 
     
@@ -46,7 +50,8 @@ class HeroController extends ControllerBase{
      */
     public static function create(ContainerInterface $container){
         return new static(
-            $container->get('module_hero.hero_articles')
+            $container->get('module_hero.hero_articles'),
+            $container->get('config.factory')
         );
     }
 
@@ -71,9 +76,6 @@ class HeroController extends ControllerBase{
 
     public function heroList(){
         // d($this->articleHeroService->getHeroArticles());
-
-
-
         // Kint::dump('dumped with kint');
         // d('Dumped with Kint');
         $heroes = [
@@ -91,7 +93,7 @@ class HeroController extends ControllerBase{
         return [
            '#theme' => 'hero_list',
            '#items' => $heroes,
-           '#title' => $this->t('Our wonderful heroes list'),
+           '#title' => $this->configFactory->get('module_hero.settings')->get('hero_list_title'),
         ];
     }
 
