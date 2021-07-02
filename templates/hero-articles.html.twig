@@ -1,0 +1,26 @@
+{{ attach_library('module_hero/hero-articles') }}
+
+<h4 class="animate__animated animate__bounce">{{owner}}</h4>
+
+
+
+{{ attach_library('module_hero/hero-articles') }}
+
+<h4 class="animate__animated animate__bounce">{{owner}}</h4>
+
+
+<ul>
+    {% for item in items %}
+        <li>
+        <div>
+            <a href= {{ '/drupal/node/' ~ item.nid.value}} >  {{ item.title.value }} </a>
+            <p > Submitted by <a href={{'/drupal/user/' ~ item.owner.uid.value}} >  {{item.owner.name.value}} </a> on {{ item.created.value| date( 'Y-m-d H:i:s', current_user.timezone.value)}} </p>
+            <p>Last modified on {{item.changed.value|date( 'Y-m-d H:i:s', current_user.timezone.value) }}</p>
+        </div>
+         </li>
+        
+    {% endfor %}
+
+</ul>
+
+

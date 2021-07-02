@@ -2,3 +2,8 @@ hero-style:
   css:
     theme:
       css/animate.css: {}
+
+hero-articles:
+  css:
+    theme:
+      css/animate.css: {}
