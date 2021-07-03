@@ -46,3 +46,14 @@ function _module_hero_article_validate(&$form, $form_state){
            $form_state->setErrorByName('title', t('title may not contain a number'));
     }
 }
+
+/**
+ * implments  hook_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {}
+ */
+function module_hero_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
+    
+    if($entity->bundle() == 'article'){
+        
+        \Drupal::messenger()->addMessage(t('We are resaving our article with name "'. $entity->get('title')->getValue()[0]['value'].'"' ));
+    }
+}

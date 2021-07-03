@@ -4,3 +4,8 @@ services:
     arguments: []
     # arguments: ['@entity_type.manager']
     # arguments: ['@entity.query']
+
+  module_hero.init_subscriber:
+    class: Drupal\module_hero\EventSubscriber\HeroInitSubscriber
+    tags:
+      - {name: 'event_subscriber'}
