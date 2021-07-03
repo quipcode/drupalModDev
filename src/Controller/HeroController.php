@@ -21,6 +21,7 @@ include 'kint.phar';
 class HeroController extends ControllerBase{
 
     protected $configFactory;
+    protected $currentUser;
 
     /**
      * The hero article service
@@ -34,9 +35,10 @@ class HeroController extends ControllerBase{
      * @param \Drupal\module_hero\Services\HeroArticleService $articleHeroService
      *   The service
      */
-    public function __construct(HeroArticleService $articleHeroService, $configFactory){
+    public function __construct(HeroArticleService $articleHeroService, $configFactory, $currentUser){
         $this->articleHeroService = $articleHeroService;
         $this->configFactory = $configFactory;
+        $this->currentUser = $currentUser;
     }
 
     
@@ -51,7 +53,8 @@ class HeroController extends ControllerBase{
     public static function create(ContainerInterface $container){
         return new static(
             $container->get('module_hero.hero_articles'),
-            $container->get('config.factory')
+            $container->get('config.factory'),
+            $container->get('current_user')
         );
     }
 
@@ -78,6 +81,7 @@ class HeroController extends ControllerBase{
         // d($this->articleHeroService->getHeroArticles());
         // Kint::dump('dumped with kint');
         // d('Dumped with Kint');
+        
         $heroes = [
             ['name' => 'Thor'],
             ['name' => 'Captain America'],
@@ -88,13 +92,21 @@ class HeroController extends ControllerBase{
             ['name' => 'Superman'],
             ['name' => 'Spider-Man']
         ];
-        
-
-        return [
+        if($this->currentUser->hasPermission('can see hero list')){
+                return [
+                '#theme' => 'hero_list',
+                '#items' => $heroes,
+                '#title' => $this->configFactory->get('module_hero.settings')->get('hero_list_title'),
+                ];
+        }else {
+                    return [
            '#theme' => 'hero_list',
-           '#items' => $heroes,
+           '#items' => [],
            '#title' => $this->configFactory->get('module_hero.settings')->get('hero_list_title'),
         ];
+        }
+
+
     }
 
 }
